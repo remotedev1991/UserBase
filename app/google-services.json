@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "670026079047",
+    "project_id": "userbase-4ebac",
+    "storage_bucket": "userbase-4ebac.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670026079047:android:add24f3040b86388f10a62",
+        "android_client_info": {
+          "package_name": "com.nak.userbase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "670026079047-87a1t54400e9a1h6ljfqm1g71v1iudok.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA17CNBLe4gkE0ig3E0y5gCGOa61YqISVA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "670026079047-87a1t54400e9a1h6ljfqm1g71v1iudok.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
