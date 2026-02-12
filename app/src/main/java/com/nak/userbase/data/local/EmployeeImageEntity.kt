@@ -9,7 +9,7 @@ import java.util.UUID
     tableName = "employee_images",
     foreignKeys = [
         ForeignKey(
-           entity = Employee::class, //origin of the foreign key
+           entity = EmployeeEntity::class, //origin of the foreign key
            parentColumns = ["employeeId"], //primary key of the parent
            childColumns = ["empId"],//foreign key of the child
            onDelete = ForeignKey.CASCADE

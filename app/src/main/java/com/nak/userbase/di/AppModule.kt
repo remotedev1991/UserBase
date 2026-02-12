@@ -5,6 +5,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import com.nak.userbase.R
 import com.nak.userbase.data.repository.AuthRepoImpl
 import com.nak.userbase.domain.repository.AuthRepository
@@ -19,10 +22,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
-    @Provides
-    @Singleton
-    fun providesFirebaseAuth() = FirebaseAuth.getInstance()
 
     @Provides
     @Singleton
@@ -42,5 +41,4 @@ object AppModule {
             .build()
         return GoogleSignIn.getClient(context, gso)
     }
-
 }

@@ -48,7 +48,8 @@ dependencies {
     implementation("com.google.firebase:firebase-bom:34.9.0")
     implementation("com.google.firebase:firebase-auth:24.0.1")
     implementation("com.google.android.gms:play-services-auth:21.5.0")
-
+    implementation("com.google.firebase:firebase-database-ktx:21.0.0")
+    implementation("com.google.firebase:firebase-storage-ktx:21.0.2")
     implementation("com.google.dagger:hilt-android:2.57.1")
     implementation(libs.androidx.room.common.jvm)
     implementation(libs.room.ktx)
