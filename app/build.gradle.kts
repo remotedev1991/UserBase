@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.ksp)
     id("com.google.dagger.hilt.android")
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -36,15 +37,21 @@ android {
     buildFeatures {
         compose = true
     }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
 }
 
 dependencies {
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
     implementation("com.google.firebase:firebase-bom:34.9.0")
     implementation("com.google.firebase:firebase-auth:24.0.1")
     implementation("com.google.android.gms:play-services-auth:21.5.0")
 
     implementation("com.google.dagger:hilt-android:2.57.1")
+    implementation(libs.androidx.room.common.jvm)
+    implementation(libs.room.ktx)
     ksp("com.google.dagger:hilt-android-compiler:2.57.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
 
