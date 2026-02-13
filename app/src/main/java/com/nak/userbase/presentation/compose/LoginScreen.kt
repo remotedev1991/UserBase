@@ -19,6 +19,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,12 +39,22 @@ import com.nak.userbase.presentation.viewmodel.LoginViewModel
 fun LoginScreen(
     modifier: Modifier = Modifier,
     googleSignInClient: GoogleSignInClient,
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: () -> Unit,
+    onLogoutSuccess: () -> Unit
 ) {
 
     val viewModel: LoginViewModel = hiltViewModel()
-
     val loginState = viewModel.loginState.collectAsStateWithLifecycle()
+    val logoutState = viewModel.logoutState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
+    LaunchedEffect(logoutState.value) {
+        if (logoutState.value) {
+            onLogoutSuccess()
+        } else {
+            Toast.makeText(context, "Logout failed", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -66,7 +77,6 @@ fun LoginScreen(
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.primary
             )
-
             when (loginState.value) {
                 is AuthUiState.Error -> {
                     val message = (loginState.value as AuthUiState.Error).message
