@@ -10,7 +10,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.nak.userbase.R
 import com.nak.userbase.data.repository.AuthRepoImpl
+import com.nak.userbase.data.repository.EmployeeRepoImpl
 import com.nak.userbase.domain.repository.AuthRepository
+import com.nak.userbase.domain.repository.EmployeeRepo
 import com.nak.userbase.domain.usecase.LoginUseCase
 import dagger.Module
 import dagger.Provides
@@ -27,6 +29,9 @@ object AppModule {
     @Singleton
     fun providesAuthRepository(impl: AuthRepoImpl): AuthRepository = impl
 
+    @Provides
+    @Singleton
+    fun providesEmployeeRepository(impl: EmployeeRepoImpl): EmployeeRepo = impl
 
     @Provides
     @Singleton

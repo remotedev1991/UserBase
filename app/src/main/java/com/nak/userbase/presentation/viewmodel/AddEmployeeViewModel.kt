@@ -18,7 +18,7 @@ sealed class ApiResult{
 }
 
 @HiltViewModel
-class AddEmployeeViewModel @Inject constructor(val addEmpUseCase: AddEmpUseCase) : ViewModel() {
+class AddEmployeeViewModel @Inject constructor(private val addEmpUseCase: AddEmpUseCase) : ViewModel() {
 
     val firstName = mutableStateOf("") //recomposition
     val age = mutableStateOf("")

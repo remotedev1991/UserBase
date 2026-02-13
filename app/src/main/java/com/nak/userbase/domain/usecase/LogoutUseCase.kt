@@ -1,7 +1,8 @@
 package com.nak.userbase.domain.usecase
 
 import com.nak.userbase.domain.repository.AuthRepository
+import javax.inject.Inject
 
-class LogoutUseCase(private val authRepository: AuthRepository) {
+class LogoutUseCase @Inject constructor(private val authRepository: AuthRepository) {
     suspend operator fun invoke() = authRepository.logout()
 }

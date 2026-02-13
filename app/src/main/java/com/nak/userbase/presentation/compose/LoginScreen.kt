@@ -6,7 +6,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,8 +18,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +31,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
+import com.nak.userbase.presentation.LocalUser
+import com.nak.userbase.presentation.util.ServiceConnectionHelper
 import com.nak.userbase.presentation.state.AuthUiState
 import com.nak.userbase.presentation.viewmodel.LoginViewModel
 
@@ -40,13 +41,17 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     googleSignInClient: GoogleSignInClient,
     onLoginSuccess: () -> Unit,
-    onLogoutSuccess: () -> Unit
+    onLogoutSuccess: () -> Unit,
+    serviceConnectionHelper: ServiceConnectionHelper
 ) {
+
+    val context = LocalContext.current
+
+    val user = LocalUser.current
 
     val viewModel: LoginViewModel = hiltViewModel()
     val loginState = viewModel.loginState.collectAsStateWithLifecycle()
     val logoutState = viewModel.logoutState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
 
     LaunchedEffect(logoutState.value) {
         if (logoutState.value) {
@@ -63,6 +68,14 @@ fun LoginScreen(
             handleSignInResult(result.data, viewModel)
         } else {
             Log.d("TAG", "LoginScreen: RESULT NOT OK")
+        }
+    }
+
+    DisposableEffect(Unit) {
+        serviceConnectionHelper.bindService()
+
+        onDispose {
+            serviceConnectionHelper.unBindService()
         }
     }
 

@@ -50,6 +50,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import coil.compose.AsyncImage
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.nak.userbase.presentation.LocalUser
 import com.nak.userbase.presentation.compose.AddEmployeeScreen
 import com.nak.userbase.presentation.compose.LoginScreen
 
@@ -60,10 +61,12 @@ fun AppNavGraph(
     googleSignInClient: GoogleSignInClient
 ) {
 
+    val user = LocalUser.current
+
     NavHost(navController = navHostController, startDestination = "home") {
 
         composable("login") {
-            LoginScreen(googleSignInClient = googleSignInClient)
+//            LoginScreen(googleSignInClient = googleSignInClient)
         }
 
         composable("home") {
