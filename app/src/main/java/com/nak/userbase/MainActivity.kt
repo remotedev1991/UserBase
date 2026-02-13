@@ -5,10 +5,12 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
@@ -32,6 +34,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.nak.userbase.presentation.LocalUser
@@ -66,6 +69,23 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            Log.d("TAG", "onReceive: ${intent?.getStringExtra("data")}")
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val intentFilter = IntentFilter("intent_received")
+        registerReceiver(receiver, intentFilter, RECEIVER_EXPORTED)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(receiver)
     }
 
     fun createNotification(): Notification {
@@ -131,7 +151,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier, onButtonClick: () -> U
         }
     )
 }
-
 
 
 @Preview(showBackground = true)

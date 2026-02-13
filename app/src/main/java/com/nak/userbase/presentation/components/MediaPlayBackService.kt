@@ -11,13 +11,58 @@ import android.os.IBinder
 import android.util.Log
 import com.nak.userbase.MainActivity
 import com.nak.userbase.R
+import com.nak.userbase.StopServiceReceiver
+import com.nak.userbase.presentation.util.ACTION_STOP_SERVICE
 
 class MediaPlayBackService : Service() {
 
+    //send and receive the messages
+    //showing the notifications
+    //last seen and other privacy options
+
+    private fun getStopPendingIntent(): PendingIntent {
+        val intent = Intent(this, StopServiceReceiver::class.java).apply {
+            action = ACTION_STOP_SERVICE
+        }
+        return PendingIntent.getBroadcast(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+    }
+
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
+        when(intent?.action) {
+
+            ACTION_STOP_SERVICE -> {
+                stopForeground(STOP_FOREGROUND_REMOVE)
+                stopSelf()
+                return START_NOT_STICKY
+            }
+
+            else -> {
+                startForegroundServiceWithNotification()
+            }
+        }
+
+        return START_STICKY
+    }
+
+    private fun startForegroundServiceWithNotification() {
+        startForeground(1, createNotification())
+    }
+
     override fun onCreate() {
         super.onCreate()
-
         startForeground(1, createNotification())
+        sendBroadcast(
+            Intent("intent_received").apply {
+                putExtra("data", "service started")
+            }
+        )
     }
 
     fun createNotification(): Notification {
@@ -34,7 +79,6 @@ class MediaPlayBackService : Service() {
 
         manager.createNotificationChannel(channel)
 
-
         //handle the click on the notification
         val pendingIntent = PendingIntent.getActivity(
             this,
@@ -49,6 +93,13 @@ class MediaPlayBackService : Service() {
             .setContentText("Notification body")
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setContentIntent(pendingIntent)
+            .addAction(
+                Notification.Action(
+                    R.drawable.ic_launcher_background,
+                    "Stop",
+                    getStopPendingIntent()
+                )
+            )
             .build()
     }
 

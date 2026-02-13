@@ -22,6 +22,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UserBase">
 
+        <receiver
+            android:name=".StopServiceReceiver"
+            android:exported="false"/>
+
         <service
             android:name=".presentation.components.MediaPlayBackService"
             android:exported="false"
