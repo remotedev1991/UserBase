@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase) : ViewModel() {
 
-    private val _loginState = MutableStateFlow<AuthUiState>(AuthUiState.Loading)
+    private val _loginState = MutableStateFlow<AuthUiState>(AuthUiState.Idle)
     val loginState = _loginState.asStateFlow()
 
     fun loginWithGoogle(idToken: String) {

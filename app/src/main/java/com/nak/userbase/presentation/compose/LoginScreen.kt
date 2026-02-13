@@ -3,6 +3,7 @@ package com.nak.userbase.presentation.compose
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -14,12 +15,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -31,7 +35,11 @@ import com.nak.userbase.presentation.state.AuthUiState
 import com.nak.userbase.presentation.viewmodel.LoginViewModel
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier, googleSignInClient: GoogleSignInClient) {
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    googleSignInClient: GoogleSignInClient,
+    onLoginSuccess: () -> Unit
+) {
 
     val viewModel: LoginViewModel = hiltViewModel()
 
@@ -59,25 +67,38 @@ fun LoginScreen(modifier: Modifier = Modifier, googleSignInClient: GoogleSignInC
                 color = MaterialTheme.colorScheme.primary
             )
 
-            AnimatedVisibility(loginState.value is AuthUiState.Success) {
+            when (loginState.value) {
+                is AuthUiState.Error -> {
+                    val message = (loginState.value as AuthUiState.Error).message
+                    Text(message, style = MaterialTheme.typography.titleLarge, color = Color.Red)
 
-                Spacer(Modifier.height(20.dp))
+                    Spacer(Modifier.height(20.dp))
 
-                val user = (loginState.value as AuthUiState.Success).user
+                    Button(onClick = {
+                        launcher.launch(googleSignInClient.signInIntent)
+                    }) {
+                        Text("Login with google", Modifier.padding(12.dp))
+                    }
+                }
 
-                Text(
-                    "Login Successful for ${user.name} with email ${user.email}",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
+                AuthUiState.Loading -> {
+                    CircularProgressIndicator()
+                }
 
-            Spacer(Modifier.height(20.dp))
+                is AuthUiState.Success -> {
+                    onLoginSuccess()
+                }
 
-            Button(onClick = {
-                launcher.launch(googleSignInClient.signInIntent)
-            }) {
-                Text("Login with google", Modifier.padding(12.dp))
+                AuthUiState.Idle -> {
+
+                    Spacer(Modifier.height(20.dp))
+
+                    Button(onClick = {
+                        launcher.launch(googleSignInClient.signInIntent)
+                    }) {
+                        Text("Login with google", Modifier.padding(12.dp))
+                    }
+                }
             }
         }
     }
